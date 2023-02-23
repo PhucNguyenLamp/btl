@@ -23,7 +23,6 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
     //inital
     int event ,i = 1; //event array
     int MaxHP = HP;
-    level = 1; // 1-> 10 
     rescue = -1; //initial
     ifstream data;
     data.open("tc1_input");
@@ -36,7 +35,16 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
             break;
         }
         if (event == 1||event == 2||event ==3|| event ==4||event ==5){
-            
+            int b=i%10;
+            int levelO = i > 6?(b > 5?b : 5) : b;
+            if (level == levelO) if (level <10) level++;
+            else if (level < levelO) {
+                float baseDamage = event==1?1:event==2?1.5:event==3?4.5:event==4?7.5:9.5;
+                int damage = baseDamage * levelO * 10;
+                HP = HP - damage;
+            }
+
+        i++;
         }
     }
     //rescue = 
