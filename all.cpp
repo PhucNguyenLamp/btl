@@ -80,6 +80,27 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
             }
         }    
         }
+        //nam MushMario
+        if (event == 11){
+            int s1=0;
+            int n1 = ((level + phoenixdown)%5 + 1) * 3;
+            for (int i=99;i>99-n1*2;i-=2){
+                s1+=i;
+            }
+            HP = HP + (s1%100);
+        }
+        //nam Fibo
+        if (event ==12){
+            if (HP ==1) {} else{
+            int fibo1=1,fibo2=1,n=0;
+            while (fibo2<HP){
+                n=fibo2;
+                fibo2+=fibo1;
+                fibo1=n;
+            }
+            HP = fibo1;
+            }
+        }
         //die hay ko die
         if (HP<=0 && phoenixdown<=0){
             rescue = 0;
