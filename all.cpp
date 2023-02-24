@@ -8,6 +8,16 @@
 using namespace std;
 
 //#knight.h
+//hoi sinh
+void revive(int &HP, int &phoenixdown,int &rescue, int &MaxHP){
+        if (HP<=0 && phoenixdown<=0){
+            rescue = 0;
+        }
+        else if (HP<=0 && phoenixdown>0){
+            phoenixdown--;
+            HP = MaxHP;
+        }
+}
 
 //knight.cpp
 void display(int HP, int level, int remedy, int maidenkiss, int phoenixdown, int rescue) {
@@ -21,16 +31,38 @@ void display(int HP, int level, int remedy, int maidenkiss, int phoenixdown, int
 
 void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, int & maidenkiss, int & phoenixdown, int & rescue) {
     //inital
-    int event ,i = 1, j=-1, k=-1; //event array
-    rescue = 1; //initial
-    ifstream data;
+
+    //line1
+    ifstream data,backup;
     data.open("tc1_input");
-    data >> HP >> level >>  remedy >> maidenkiss >> phoenixdown;
+    string line1;
+    getline(data, line1);
+    stringstream stream1(line1);
+    stream1>> HP >> level >>  remedy >> maidenkiss >> phoenixdown;
+
+    //line2
+    string line2;
+    getline(data, line2);
+    stringstream stream2(line2);
+
+    //line3
+    string line3;
+    getline(data, line3);
+    stringstream stream3(line3);
+    string ghost,aclepius,merlin;
+    getline(stream3,ghost,',');
+    getline(stream3,aclepius,',');
+    getline(stream3,merlin);
+
+
+    int event, i = 1, j=-1, k=-1; //event array
+    rescue = 1; //initial
+    
     int MaxHP = HP;
     int olevel = level;
 
     //processing
-    while (data >> event){
+    while (stream2 >> event){
         //win
         if (event == 0) {
             break;
@@ -101,16 +133,28 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
             HP = fibo1;
             }
         }
-        //die hay ko die
-        if (HP<=0 && phoenixdown<=0){
-            rescue = 0;
-            break;
-        }
-        else if (HP<=0 && phoenixdown>0){
-            phoenixdown--;
-            HP = MaxHP;
-        }
+        //nấm ma 👻
+        string ghostEvent = to_string(event);
+        backup.open(ghost);
+        if(ghostEvent[0]=='1'&&ghostEvent[1]=='3'){
+            int len = ghostEvent.length();
+            for (int i=2;i<len;i++){
+                if (ghostEvent[i] == '1'){
+                    
+                } else if (ghostEvent[i] == '2'){
+                    
+                } else if (ghostEvent[i] == '3'){
+                    
+                } else if (ghostEvent[i] == '4'){
 
+                }
+                if (HP > MaxHP) HP = MaxHP;
+                revive(HP,phoenixdown,rescue, MaxHP); if (rescue ==0) break;
+            }        
+        }
+       
+        //hoi sinh
+        revive(HP,phoenixdown,rescue, MaxHP); if (rescue ==0) break;
         //nhat do giua duong
 
         //postprocessing
