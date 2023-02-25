@@ -31,7 +31,7 @@ void display(int HP, int level, int remedy, int maidenkiss, int phoenixdown, int
 
 void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, int & maidenkiss, int & phoenixdown, int & rescue) {
     //inital
-
+    int event, i = 1, j=-1, k=-1,n=0; //event array
     //line1
     ifstream data,backup;
     data.open("tc1_input");
@@ -44,6 +44,8 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
     string line2;
     getline(data, line2);
     stringstream stream2(line2);
+    stringstream stream2s(line2);
+    while (stream2s >> event){n++;}
 
     //line3
     string line3;
@@ -55,9 +57,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
     getline(stream3,merlin);
 
 
-    int event, i = 1, j=-1, k=-1; //event array
-    rescue = 1; //initial
-    
+    rescue = -1; //initial
     int MaxHP = HP;
     int olevel = level;
 
@@ -152,12 +152,8 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                 revive(HP,phoenixdown,rescue, MaxHP); if (rescue ==0) break;
             }        
         }
-       
-        //hoi sinh
-        revive(HP,phoenixdown,rescue, MaxHP); if (rescue ==0) break;
-        //nhat do giua duong
-
-        //postprocessing
+        //clock
+        revive(HP,phoenixdown,rescue, MaxHP);
         j--; if (j==0){
             HP *=5;
             if (HP > MaxHP) HP = MaxHP;
@@ -166,13 +162,16 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
         k--; if (k==0){
             level=olevel;
         }   
-
+        if (i==n&&HP>0) rescue =1;
+        //displaying
+        display(HP, level, remedy, maidenkiss, phoenixdown, rescue); 
+        //hoi sinh
+        if (rescue ==0) break; 
+        //nhat do giua duong
+        
         i++;
     
     }
-
-    //displaying
-    display(HP, level, remedy, maidenkiss, phoenixdown, rescue); 
 
 }
 
