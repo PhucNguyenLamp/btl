@@ -70,13 +70,25 @@ bool event11(int event){
     if (event == 11)
     return true; else return false;
 }
-void mushmario(int &level,int &phoenixdown, int &HP){
-                int s1=0;
+void HPcontrol(int &HP, int &MaxHP){
+    if (HP>MaxHP) HP = MaxHP;
+}
+void mushmario(int &level,int &phoenixdown, int &HP, int&MaxHP){
+                int s1=0,tempHP=HP,primecheck;
             int n1 = ((level + phoenixdown)%5 + 1) * 3;
             for (int i=99;i>99-n1*2;i-=2){
                 s1+=i;
             }
             HP = HP + (s1%100);
+            for (int i=HP-1;;i++){
+                up:; i++;
+                for (int j=2;j< HP/2;j++){
+                    if (i%j==0) goto up;
+                }
+                HP = i;
+                break;
+            }
+            HPcontrol(HP,MaxHP);
 }
 bool event12(int event){
     if (event == 12)
@@ -106,9 +118,6 @@ void revive(int &HP, int &phoenixdown,int &rescue, int &MaxHP){
             phoenixdown--;
             HP = MaxHP;
         }
-}
-void HPcontrol(int &HP, int &MaxHP){
-    if (HP>MaxHP) HP = MaxHP;
 }
 void potioncontrol(int &remedy,int &maidenkiss, int &phoenixdown){
     if (remedy>99) remedy=99;
@@ -180,7 +189,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
         
         //nam MushMario
         if (event11(event)){
-            mushmario(level,phoenixdown,HP);
+            mushmario(level,phoenixdown,HP,MaxHP);
         }
         //nam Fibo
         if (event12(event)){
@@ -244,7 +253,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                     HP = HP - (maxi2+mini2);
                     //nam 4
                 } else if (ghostEvent[i] == '4'){
-                    int max2_3x,max2_3i;   
+                    int max2_3x,max2_3i=0,max1_3x,max1_3i=0;   
                     int maxi2=0,mini2=0,xi,numi=1,max,min;
                     xi = stoi(nstring);
                     if (xi<0) xi = -xi;
@@ -256,7 +265,6 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                         if(xi<0) xi = -xi;
                         xi = (17 * xi + 9)%257;
                         if(xi>max){maxi2=numi; max=xi;} 
-                        if(xi<min){mini2=numi; min=xi;}
                         numi++;
                     }          
                     HP = HP - (max2_3x + max2_3i);
