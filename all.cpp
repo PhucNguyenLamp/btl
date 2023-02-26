@@ -124,6 +124,23 @@ void potioncontrol(int &remedy,int &maidenkiss, int &phoenixdown){
     if (maidenkiss>99) maidenkiss=99;
     if(phoenixdown>99) phoenixdown=99;
 }
+void pickup(int &remedy,int &maidenkiss, int &phoenixdown,int &event){
+    if (event==15) remedy++;
+    if (event==16) maidenkiss++;
+    if (event==17) phoenixdown++;
+    potioncontrol(remedy,maidenkiss,phoenixdown);
+}
+void usepotion(int &remedy,int &maidenkiss,int &j,int &k,int &HP,int &MaxHP,int &level,int &olevel){
+    if (j>1){
+        remedy--;
+        HP *=5;
+        if (HP > MaxHP) HP = MaxHP;
+    } 
+    if (k>1){
+        maidenkiss--;
+        level = olevel;
+    }
+}
 //knight.cpp
 void display(int HP, int level, int remedy, int maidenkiss, int phoenixdown, int rescue) {
     cout << "HP=" << HP
@@ -163,8 +180,8 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
 
     rescue = -1; //initial
     int MaxHP = HP;
-    int olevel = level;
-
+    int olevel=level;
+    int as=0;
     //processing
     while (stream2 >> event){
         //win
@@ -221,19 +238,20 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                     HP = HP - (maxi + mini);
                     //ghost 2
                 } else if (ghostEvent[i] == '2'){
-                    // int initial;
-                    // getline(backup,nstring,',');
-                    // initial = stoi(nstring);
-                    // for (int i=2,j;i<=n13;i++){
-                    //     getline(backup,nstring,',');
-                    //     num = stoi(nstring);
-                    //     if (initial>num){
+                    int initial,mtx=0,mti=0;
+                    getline(backup,nstring,',');
+                    initial = stoi(nstring);
+                    for (int i=2,j;i<=n13;i++){
+                        getline(backup,nstring,',');
+                        num = stoi(nstring);
+                        if (initial>num){
 
-                    //     } else if (initial==num) break;
-                    //     else if (initial<num){
+                        } else if (initial==num) break;
+                        else if (initial<num){
 
-                    //     }
-                    // }
+                        }
+                    }
+                    HP = HP - (mtx + mti);
                     //ghost 3
                 } else if (ghostEvent[i] == '3'){
                     int maxi2=0,mini2=0,xi,numi=1,max,min;
@@ -283,6 +301,19 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                 revive(HP,phoenixdown,rescue, MaxHP); if (rescue ==0) break;
             }        
         }
+        if (event ==15||event==16||event==17){
+            pickup(remedy,maidenkiss,phoenixdown,event);
+        }
+        if (event==19){
+
+        }
+        if (MaxHP==999){break;}
+        if (/*hàm check prime*/){
+
+        }
+        if (event==18){
+            
+        }
         //clock
         revive(HP,phoenixdown,rescue, MaxHP);
         j--; if (j==0){
@@ -299,7 +330,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
         //hoi sinh
         if (rescue ==0) break;
         //nhat do giua duong
-
+        if (k<=0) olevel = level;
         i++;
     
     }
