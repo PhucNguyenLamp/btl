@@ -254,17 +254,27 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                     //nam 4
                 } else if (ghostEvent[i] == '4'){
                     int max2_3x,max2_3i=0,max1_3x,max1_3i=0;   
-                    int maxi2=0,mini2=0,xi,numi=1,max,min;
+                    int xi,numi=1;
                     xi = stoi(nstring);
                     if (xi<0) xi = -xi;
                     xi = (17 * xi + 9)%257;
-                    max=xi;min=xi;
-                    for (int i=1,j;i<n13;i++){
+                    max1_3x=xi;
+                    max2_3x=xi;
+                    for (int i=1,j;i<3;i++){
                         getline(backup,nstring,',');
                         xi = stoi(nstring); 
                         if(xi<0) xi = -xi;
                         xi = (17 * xi + 9)%257;
-                        if(xi>max){maxi2=numi; max=xi;} 
+                        if(xi>max1_3x){max1_3x=xi;max1_3i=numi;} 
+                        numi++;
+                    }
+                    getline(backup,nstring,','); numi=1;
+                    for (int i=1;i<3;i++){
+                        getline(backup,nstring,',');
+                        xi = stoi(nstring); 
+                        if(xi<0) xi = -xi;
+                        xi = (17 * xi + 9)%257;
+                        if(xi>max2_3x&&max2_3x<max1_3x){max2_3x=xi;max2_3i=numi;}
                         numi++;
                     }          
                     HP = HP - (max2_3x + max2_3i);
