@@ -8,6 +8,95 @@
 using namespace std;
 
 //#knight.h
+//level quai
+int levelOf(int i){
+        int b=i%10;
+        int levelO = i > 6?(b > 5?b : 5) : b;
+    return levelO;
+}
+//event 0
+bool event0(int event){
+    if (event == 0)
+    return true; else return false;
+}
+//event 1-5
+bool event1_5(int event){
+    if (event == 1||event == 2||event ==3|| event ==4||event ==5)
+    return true; else return false;
+}
+bool levelup(int &level, int &levelO){
+        if (level > levelO){
+        if (level < 10) level++;
+        return true;
+        }
+        return false;
+}
+void damage(int &event, int &level, int &levelO, int &HP){
+    if (level < levelO) {
+    float baseDamage = event==1?1:event==2?1.5:event==3?4.5:event==4?7.5:9.5;
+    int damage = baseDamage * levelO * 10;
+    HP = HP - damage;
+    }
+}
+bool event6(int event,int j, int k){
+    if (event == 6 && j<=0&&k<=0) return true; else return false;
+
+}
+void tiny(int &level, int &levelO, int &HP, int &remedy, int &j){
+    if (level < levelO) {
+        if (remedy>=1){
+        remedy--;
+        } else {
+        HP/=5;
+        if (HP==0) HP = 1;
+        j=4; //vi qua luot nay la con 3
+        }
+    }
+}
+bool event7(int event,int j, int k){
+    if (event == 7 && j<=0&&k<=0) return true; else return false;
+}
+void frog(int &level, int &levelO, int &HP, int &maidenkiss, int &k){
+        if (level < levelO) {
+        if (maidenkiss>=1){
+            maidenkiss--;
+        } else {
+        level=1;
+        k=4;
+        }
+}
+}
+bool event11(int event){
+    if (event == 11)
+    return true; else return false;
+}
+void mushmario(int &level,int &phoenixdown, int &HP){
+                int s1=0;
+            int n1 = ((level + phoenixdown)%5 + 1) * 3;
+            for (int i=99;i>99-n1*2;i-=2){
+                s1+=i;
+            }
+            HP = HP + (s1%100);
+}
+bool event12(int event){
+    if (event == 12)
+    return true; else return false;
+}
+void fibo(int &HP){
+                if (HP ==1) {} else{
+            int fibo1=1,fibo2=1,n=0;
+            while (fibo2<HP){
+                n=fibo2;
+                fibo2+=fibo1;
+                fibo1=n;
+            }
+            HP = fibo1;
+            }
+}
+bool event13(string &ghostEvent){
+    if (ghostEvent[0]=='1'&&ghostEvent[1]=='3')
+    return true; else return false;
+}
 //hoi sinh
 void revive(int &HP, int &phoenixdown,int &rescue, int &MaxHP){
         if (HP<=0 && phoenixdown<=0){
@@ -18,7 +107,9 @@ void revive(int &HP, int &phoenixdown,int &rescue, int &MaxHP){
             HP = MaxHP;
         }
 }
-
+void HPcontrol(int &HP, int &MaxHP){
+    if (HP>MaxHP) HP = MaxHP;
+}
 //knight.cpp
 void display(int HP, int level, int remedy, int maidenkiss, int phoenixdown, int rescue) {
     cout << "HP=" << HP
@@ -64,79 +155,37 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
     //processing
     while (stream2 >> event){
         //win
-        if (event == 0) {
-            break;
-        }
+        if(event0(event)) break;
         //level quai
-        int b=i%10;
-        int levelO = i > 6?(b > 5?b : 5) : b;
+        int levelO = levelOf(i);
         //quai quen
-        if (event == 1||event == 2||event ==3|| event ==4||event ==5){
-            if (level > levelO){
-                if (level < 10) level++;
-            }
-            else if (level < levelO) {
-                float baseDamage = event==1?1:event==2?1.5:event==3?4.5:event==4?7.5:9.5;
-                int damage = baseDamage * levelO * 10;
-                HP = HP - damage;
-            }
+        if(event1_5(event)){
+            if(levelup(level,levelO)) {} else damage(event,level,levelO,HP);
         }
         //phat^.
-        if (event == 6 && j<=0&&k<=0){
-        if (level > levelO){
-            level+=2;
-            if (level>10) level=10;
-        }
-        else if (level < levelO) {
-            if (remedy>=1){
-                remedy--;
-            } else {
-            HP/=5;
-            if (HP==0) HP = 1;
-            j=4; //vi qua luot nay la con 3
-            }
+        if (event6(event,j,k)){
+        if (levelup(level,levelO)) levelup(level,levelO); 
+        else tiny(level, levelO,HP,remedy,j);
         }    
-        }
+        
         //con coc
-        if (event == 7&&j<=0&&k<=0){
-        if (level > levelO){
-            level+=2;
-            if (level>10) level=10;
-        }
-        else if (level < levelO) {
-            if (maidenkiss>=1){
-                remedy--;
-            } else {
-            level=1;
-            k=4;
-            }
+        if (event7(event,j,k)){
+        if(levelup(level,levelO)) levelup(level,levelO);
+        else frog(level,levelO,HP,maidenkiss,k);
         }    
-        }
+        
         //nam MushMario
-        if (event == 11){
-            int s1=0;
-            int n1 = ((level + phoenixdown)%5 + 1) * 3;
-            for (int i=99;i>99-n1*2;i-=2){
-                s1+=i;
-            }
-            HP = HP + (s1%100);
+        if (event11(event)){
+            mushmario(level,phoenixdown,HP);
         }
         //nam Fibo
-        if (event ==12){
-            if (HP ==1) {} else{
-            int fibo1=1,fibo2=1,n=0;
-            while (fibo2<HP){
-                n=fibo2;
-                fibo2+=fibo1;
-                fibo1=n;
-            }
-            HP = fibo1;
-            }
+        if (event12(event)){
+            fibo(HP);
         }
         //nấm ma 👻
         string ghostEvent = to_string(event);
         backup.open(ghost);
-        if(ghostEvent[0]=='1'&&ghostEvent[1]=='3'){
+        if(event13(ghostEvent)){
             int len = ghostEvent.length();
             for (int i=2;i<len;i++){
                 if (ghostEvent[i] == '1'){
@@ -148,7 +197,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                 } else if (ghostEvent[i] == '4'){
 
                 }
-                if (HP > MaxHP) HP = MaxHP;
+                HPcontrol(HP,MaxHP);
                 revive(HP,phoenixdown,rescue, MaxHP); if (rescue ==0) break;
             }        
         }
@@ -168,7 +217,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
         //hoi sinh
         if (rescue ==0) break; 
         //nhat do giua duong
-        
+
         i++;
     
     }
