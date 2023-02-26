@@ -152,7 +152,6 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
     getline(stream3,aclepius,',');
     getline(stream3,merlin);
 
-
     rescue = -1; //initial
     int MaxHP = HP;
     int olevel = level;
@@ -191,27 +190,58 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
         string ghostEvent = to_string(event);
         backup.open(ghost);
         if(event13(ghostEvent)){
-            int n13;
+            int n13,num,trunggian;
             backup >> n13;
             int len = ghostEvent.length();
+            string nstring;
+            getline(backup,nstring,',');
             for (int i=2;i<len;i++){
+                //ghost 1
                 if (ghostEvent[i] == '1'){
-                    int maxi, mini,num;
-                    string nstring;
-                    getline(backup,nstring,',');
-                    maxi = stoi(nstring);
-                    mini = maxi;
+                    int max,min,maxi=0,mini=0,numi=1;
+                    max = stoi(nstring);
+                    min = max;
                     for (int i=2,j;i<=n13;i++){
-                getline(backup,nstring,',');
-                num = stoi(nstring);
-                if (num<mini) mini = num;
-                if (num>maxi) maxi =num;
-                }
-                HP = HP - (maxi + mini);
+                        getline(backup,nstring,',');
+                        num = stoi(nstring); 
+                        if (num<min) {min = num; mini=numi;}
+                        if (num>max) {max = num; maxi=numi;}
+                        numi++;
+                    }
+                    HP = HP - (maxi + mini);
+                    //ghost 2
                 } else if (ghostEvent[i] == '2'){
-                    
+                    // int initial;
+                    // getline(backup,nstring,',');
+                    // initial = stoi(nstring);
+                    // for (int i=2,j;i<=n13;i++){
+                    //     getline(backup,nstring,',');
+                    //     num = stoi(nstring);
+                    //     if (initial>num){
+
+                    //     } else if (initial==num) break;
+                    //     else if (initial<num){
+
+                    //     }
+                    // }
+                    //ghost 3
                 } else if (ghostEvent[i] == '3'){
-                    
+                    int maxi2=0,mini2=0,xi,numi=1,max,min;
+                    num = stoi(nstring);
+                    if (xi<0) xi = -xi;
+                    xi = (17 * xi + 9)%257;
+                    max=xi;min=xi;
+                    for (int i=1,j;i<n13;i++){
+                        getline(backup,nstring,',');
+                        xi = stoi(nstring); 
+                        if(xi<0) xi = -xi;
+                        xi = (17 * xi + 9)%257;
+                        if(xi>max){maxi2=numi; max=xi;} 
+                        if(xi<min){mini2=numi; min=xi;}
+                        numi++;
+                    }
+                    HP = HP - (maxi2+mini2);
+                    //nam 4
                 } else if (ghostEvent[i] == '4'){
 
                 }
@@ -233,7 +263,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
         //displaying
         display(HP, level, remedy, maidenkiss, phoenixdown, rescue); 
         //hoi sinh
-        if (rescue ==0) break; 
+        if (rescue ==0) break;
         //nhat do giua duong
 
         i++;
