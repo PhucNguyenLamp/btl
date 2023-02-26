@@ -191,9 +191,10 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
         backup.open(ghost);
         if(event13(ghostEvent)){
             int n13,num,trunggian;
-            backup >> n13;
-            int len = ghostEvent.length();
             string nstring;
+            getline(backup,nstring);
+            n13 = stoi(nstring);
+            int len = ghostEvent.length();
             getline(backup,nstring,',');
             for (int i=2;i<len;i++){
                 //ghost 1
@@ -227,7 +228,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                     //ghost 3
                 } else if (ghostEvent[i] == '3'){
                     int maxi2=0,mini2=0,xi,numi=1,max,min;
-                    num = stoi(nstring);
+                    xi = stoi(nstring);
                     if (xi<0) xi = -xi;
                     xi = (17 * xi + 9)%257;
                     max=xi;min=xi;
@@ -243,7 +244,22 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                     HP = HP - (maxi2+mini2);
                     //nam 4
                 } else if (ghostEvent[i] == '4'){
-
+                    int max2_3x,max2_3i;   
+                    int maxi2=0,mini2=0,xi,numi=1,max,min;
+                    xi = stoi(nstring);
+                    if (xi<0) xi = -xi;
+                    xi = (17 * xi + 9)%257;
+                    max=xi;min=xi;
+                    for (int i=1,j;i<n13;i++){
+                        getline(backup,nstring,',');
+                        xi = stoi(nstring); 
+                        if(xi<0) xi = -xi;
+                        xi = (17 * xi + 9)%257;
+                        if(xi>max){maxi2=numi; max=xi;} 
+                        if(xi<min){mini2=numi; min=xi;}
+                        numi++;
+                    }          
+                    HP = HP - (max2_3x + max2_3i);
                 }
                 HPcontrol(HP,MaxHP);
                 revive(HP,phoenixdown,rescue, MaxHP); if (rescue ==0) break;
