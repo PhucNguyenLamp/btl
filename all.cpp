@@ -110,6 +110,11 @@ void revive(int &HP, int &phoenixdown,int &rescue, int &MaxHP){
 void HPcontrol(int &HP, int &MaxHP){
     if (HP>MaxHP) HP = MaxHP;
 }
+void potioncontrol(int &remedy,int &maidenkiss, int &phoenixdown){
+    if (remedy>99) remedy=99;
+    if (maidenkiss>99) maidenkiss=99;
+    if(phoenixdown>99) phoenixdown=99;
+}
 //knight.cpp
 void display(int HP, int level, int remedy, int maidenkiss, int phoenixdown, int rescue) {
     cout << "HP=" << HP
@@ -186,10 +191,23 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
         string ghostEvent = to_string(event);
         backup.open(ghost);
         if(event13(ghostEvent)){
+            int n13;
+            backup >> n13;
             int len = ghostEvent.length();
             for (int i=2;i<len;i++){
                 if (ghostEvent[i] == '1'){
-                    
+                    int maxi, mini,num;
+                    string nstring;
+                    getline(backup,nstring,',');
+                    maxi = stoi(nstring);
+                    mini = maxi;
+                    for (int i=2,j;i<=n13;i++){
+                getline(backup,nstring,',');
+                num = stoi(nstring);
+                if (num<mini) mini = num;
+                if (num>maxi) maxi =num;
+                }
+                HP = HP - (maxi + mini);
                 } else if (ghostEvent[i] == '2'){
                     
                 } else if (ghostEvent[i] == '3'){
