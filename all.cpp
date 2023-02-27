@@ -184,6 +184,8 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
     int as=0;
     //processing
     while (stream2 >> event){
+        //win ez
+        if (MaxHP==999){break;}
         //win
         if(event0(event)) break;
         //level quai
@@ -217,19 +219,21 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
         backup.open(ghost);
         if(event13(ghostEvent)){
             int n13,num,trunggian;
-            string nstring;
+            string nstring,ghostline;
             getline(backup,nstring);
             n13 = stoi(nstring);
+            getline(backup,ghostline);
+            stringstream stream4(ghostline);
             int len = ghostEvent.length();
-            getline(backup,nstring,',');
             for (int i=2;i<len;i++){
                 //ghost 1
                 if (ghostEvent[i] == '1'){
                     int max,min,maxi=0,mini=0,numi=1;
+                    getline(stream4,nstring,',');
                     max = stoi(nstring);
                     min = max;
                     for (int i=2,j;i<=n13;i++){
-                        getline(backup,nstring,',');
+                        getline(stream4,nstring,',');
                         num = stoi(nstring); 
                         if (num<min) {min = num; mini=numi;}
                         if (num>max) {max = num; maxi=numi;}
@@ -239,28 +243,72 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                     //ghost 2
                 } else if (ghostEvent[i] == '2'){
                     int initial,mtx=0,mti=0;
-                    getline(backup,nstring,',');
+                    getline(stream4,nstring,',');
                     initial = stoi(nstring);
-                    for (int i=2,j;i<=n13;i++){
-                        getline(backup,nstring,',');
-                        num = stoi(nstring);
-                        if (initial>num){
-
-                        } else if (initial==num) break;
-                        else if (initial<num){
-
-                        }
+                    getline(stream4,nstring,',');
+                    num = stoi(nstring);
+                    if (initial>num){
+                        int check=0,num2=0;
+                        for (int i=2;i<n13;i++){
+                        getline(stream4,nstring,',');
+                        num2 = stoi(nstring);
+                        if (num>num2) check++;
+                        num=num2;
                     }
+                    if (check==n13-2) {
+                        mtx = initial;
+                        mti = 0;
+                    }
+                    } else if (initial==num) {
+                        mtx = -2;
+                        mti = -3;
+                    }
+                    else if (initial<num){
+                        int check=0,num2=0,down=0,count,mtxtemp,mtitemp;
+                        for (int i=2;i<n13;i++){
+                        getline(stream4,nstring,',');
+                        num2 = stoi(nstring);
+                        if (num<num2&&down==0) {
+                            check++;
+                            num=num2;
+                        }
+                        else if (num>num2&&down==0){
+                            down=1; check++;
+                            mtxtemp=num;
+                            mtitemp=i-1;
+                            num=num2;
+                        }
+                        else if (num>num2&&down==1){
+                            check++;
+                            num=num2;
+                        }
+                        }
+                        if (check==n13-2&&down==0){
+                            mtx = num2;
+                            mti = n13-1;
+                        } else if (check==n13-2&&down==1){
+                            mtx = mtxtemp;
+                            mti = mtitemp;
+                        } else {
+                            mtx = -2;
+                            mti = -3;
+                        }
+
+                    }
+
+
+                    
                     HP = HP - (mtx + mti);
                     //ghost 3
                 } else if (ghostEvent[i] == '3'){
                     int maxi2=0,mini2=0,xi,numi=1,max,min;
+                    getline(stream4,nstring,',');
                     xi = stoi(nstring);
                     if (xi<0) xi = -xi;
                     xi = (17 * xi + 9)%257;
                     max=xi;min=xi;
                     for (int i=1,j;i<n13;i++){
-                        getline(backup,nstring,',');
+                        getline(stream4,nstring,',');
                         xi = stoi(nstring); 
                         if(xi<0) xi = -xi;
                         xi = (17 * xi + 9)%257;
@@ -273,22 +321,23 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                 } else if (ghostEvent[i] == '4'){
                     int max2_3x,max2_3i=0,max1_3x,max1_3i=0;   
                     int xi,numi=1;
+                    getline(stream4,nstring,',');
                     xi = stoi(nstring);
                     if (xi<0) xi = -xi;
                     xi = (17 * xi + 9)%257;
                     max1_3x=xi;
                     max2_3x=xi;
                     for (int i=1,j;i<3;i++){
-                        getline(backup,nstring,',');
+                        getline(stream4,nstring,',');
                         xi = stoi(nstring); 
                         if(xi<0) xi = -xi;
                         xi = (17 * xi + 9)%257;
                         if(xi>max1_3x){max1_3x=xi;max1_3i=numi;} 
                         numi++;
                     }
-                    getline(backup,nstring,','); numi=1;
+                    getline(stream4,nstring,','); numi=1;
                     for (int i=1;i<3;i++){
-                        getline(backup,nstring,',');
+                        getline(stream4,nstring,',');
                         xi = stoi(nstring); 
                         if(xi<0) xi = -xi;
                         xi = (17 * xi + 9)%257;
@@ -307,12 +356,11 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
         if (event==19){
 
         }
-        if (MaxHP==999){break;}
-        if (/*hàm check prime*/){
+        // if (/*hàm check prime*/){
 
-        }
+        // }
         if (event==18){
-            
+
         }
         //clock
         revive(HP,phoenixdown,rescue, MaxHP);
