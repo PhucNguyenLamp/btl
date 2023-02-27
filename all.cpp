@@ -141,6 +141,13 @@ void usepotion(int &remedy,int &maidenkiss,int &j,int &k,int &HP,int &MaxHP,int 
         level = olevel;
     }
 }
+//primecheck for lancelot
+bool primeCheck(int MaxHP){
+    for (int i=2;i<MaxHP/2;i++){
+        if (MaxHP%i==0) return false;
+    }
+    return true;
+}
 //knight.cpp
 void display(int HP, int level, int remedy, int maidenkiss, int phoenixdown, int rescue) {
     cout << "HP=" << HP
@@ -155,7 +162,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
     //inital
     int event, i = 1, j=-1, k=-1,n=0; //event array
     //line1
-    ifstream data,backup;
+    ifstream data,backup,backup2,backup3;
     data.open("tc1_input");
     string line1;
     getline(data, line1);
@@ -181,28 +188,31 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
     rescue = -1; //initial
     int MaxHP = HP;
     int olevel=level;
-    int as=0;
+    int as=0,mer=0;
     //processing
     while (stream2 >> event){
         //win ez
-        if (MaxHP==999){break;}
+        if (MaxHP==999){display(HP, level, remedy, maidenkiss, phoenixdown, rescue); break;}
         //win
-        if(event0(event)) break;
+        if(event0(event)) {display(HP, level, remedy, maidenkiss, phoenixdown, rescue); break;};
         //level quai
         int levelO = levelOf(i);
         //quai quen
         if(event1_5(event)){
-            if(levelup(level,levelO)) {} else damage(event,level,levelO,HP);
+            if(primeCheck(MaxHP)) level++;
+            else if (levelup(level,levelO)) {} else damage(event,level,levelO,HP);
         }
         //phat^.
         if (event6(event,j,k)){
-        if (levelup(level,levelO)) levelup(level,levelO); 
+            if(primeCheck(MaxHP)) level+=2;
+        else if (levelup(level,levelO)) levelup(level,levelO); 
         else tiny(level, levelO,HP,remedy,j);
         }    
         
         //con coc
         if (event7(event,j,k)){
-        if(levelup(level,levelO)) levelup(level,levelO);
+        if(primeCheck(MaxHP)) level+=2;
+        else if(levelup(level,levelO)) levelup(level,levelO);
         else frog(level,levelO,HP,maidenkiss,k);
         }    
         
@@ -228,16 +238,15 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
             for (int i=2;i<len;i++){
                 //ghost 1
                 if (ghostEvent[i] == '1'){
-                    int max,min,maxi=0,mini=0,numi=1;
+                    int max,min,maxi=0,mini=0;
                     getline(stream4,nstring,',');
                     max = stoi(nstring);
                     min = max;
-                    for (int i=2,j;i<=n13;i++){
+                    for (int i=1,j;i<n13;i++){
                         getline(stream4,nstring,',');
                         num = stoi(nstring); 
-                        if (num<min) {min = num; mini=numi;}
-                        if (num>max) {max = num; maxi=numi;}
-                        numi++;
+                        if (num<min) {min = num; mini=i;}
+                        if (num>max) {max = num; maxi=i;}
                     }
                     HP = HP - (maxi + mini);
                     //ghost 2
@@ -348,19 +357,66 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                 }
                 HPcontrol(HP,MaxHP);
                 revive(HP,phoenixdown,rescue, MaxHP); if (rescue ==0) break;
-            }        
+            }
         }
+        //luom thuoc
         if (event ==15||event==16||event==17){
             pickup(remedy,maidenkiss,phoenixdown,event);
+            usepotion(remedy,maidenkiss,j,k,HP,MaxHP,level,olevel);
         }
-        if (event==19){
-
+        //god of thuoc
+        if (event==19&&as==0){
+            string thuoc,dong;
+            int row,col;
+            backup2.open(aclepius);
+            getline(backup2,thuoc); 
+            row = stoi(thuoc);
+            getline(backup2,thuoc); col = stoi(thuoc);
+            for (int i=0;i<row;i++){
+                int soluong=0;
+                getline(backup2,dong);
+                stringstream dongstream(dong);
+                for (int j=0;j<col;j++){
+                    getline(dongstream, thuoc,' ');
+                    if ((thuoc=="16"||thuoc=="17"||thuoc=="18")&&soluong<3){
+                        soluong++;
+                        if (thuoc=="16") remedy++;
+                        else if (thuoc=="17") maidenkiss++;
+                        else phoenixdown++;
+                    }
+                }
+            }
+            usepotion(remedy,maidenkiss,j,k,HP,MaxHP,level,olevel);
+            as++;
         }
-        // if (/*hàm check prime*/){
-
-        // }
+        //bo$$ cuoi 💀☠
+        if (event==99){
+            if(primeCheck(MaxHP)){
+                if (level>=8){
+                    level = 10;
+                } else{
+                    rescue =0;
+                    display(HP, level, remedy, maidenkiss, phoenixdown, rescue); 
+                    break;
+                }
+                
+            } else {
+                if (level ==10){
+                } else {
+                    rescue =0;
+                    display(HP, level, remedy, maidenkiss, phoenixdown, rescue); 
+                    break;
+                }
+            }
+        }
+        // merlin gay 🏳️‍🌈
         if (event==18){
-
+            string item,dongmerlin;
+            int row;
+            backup3.open(merlin);
+            getline(backup3,dongmerlin);
+            row = stoi(dongmerlin);
+            
         }
         //clock
         revive(HP,phoenixdown,rescue, MaxHP);
