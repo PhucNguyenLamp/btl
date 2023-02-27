@@ -410,13 +410,19 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
             }
         }
         // merlin gay 🏳️‍🌈
-        if (event==18){
+        if (event==18&&mer==0){
             string item,dongmerlin;
             int row;
             backup3.open(merlin);
             getline(backup3,dongmerlin);
             row = stoi(dongmerlin);
-            
+            for (int i=0;i<row;i++){
+                getline(backup3,dongmerlin);
+                if ((dongmerlin.find("merlin")!=string::npos||dongmerlin.find("Merlin")!=string::npos)) HP+=3;
+                else if ((dongmerlin.find('m')!=string::npos||dongmerlin.find('M')!=string::npos)&&(dongmerlin.find("e")!=string::npos||dongmerlin.find("E")!=string::npos)&&(dongmerlin.find('r')!=string::npos||dongmerlin.find('R')!=string::npos)&&(dongmerlin.find("l")!=string::npos||dongmerlin.find('L')!=string::npos)&&(dongmerlin.find("i")!=string::npos||dongmerlin.find('I')!=string::npos)&&(dongmerlin.find('n')!=string::npos||dongmerlin.find('N')!=string::npos)) HP+=2;
+            }
+            HPcontrol(HP,MaxHP);
+            mer++;
         }
         //clock
         revive(HP,phoenixdown,rescue, MaxHP);
