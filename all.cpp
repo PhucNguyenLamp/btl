@@ -391,6 +391,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                 }
             }
             usepotion(remedy,maidenkiss,j,k,HP,MaxHP,level,olevel);
+            potioncontrol(remedy,maidenkiss,phoenixdown);
             as++;
         }
         //bo$$ cuoi 💀☠

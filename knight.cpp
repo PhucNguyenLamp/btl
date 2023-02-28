@@ -154,7 +154,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
     //inital
     int event, i = 1, j=-1, k=-1,n=0; //event array
     //line1
-    ifstream data,backup,backup2,backup3;
+    ifstream data,backup,backup1,backup2,backup3;
     data.open("tc1_input");
     string line1;
     getline(data, line1);
@@ -176,6 +176,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
     getline(stream3,ghost,',');
     getline(stream3,aclepius,',');
     getline(stream3,merlin);
+    data.close();
 
     rescue = -1; //initial
     int MaxHP = HP;
@@ -186,7 +187,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
         //win ez
         if (MaxHP==999){display(HP, level, remedy, maidenkiss, phoenixdown, rescue); break;}
         //win
-        if(event0(event)) {display(HP, level, remedy, maidenkiss, phoenixdown, rescue); break;};
+        if(event0(event)) { if (HP>0) rescue=1;display(HP, level, remedy, maidenkiss, phoenixdown, rescue); break;};
         //level quai
         int levelO = levelOf(i);
         //quai quen
@@ -237,8 +238,8 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                     for (int i=1,j;i<n13;i++){
                         getline(stream4,nstring,',');
                         num = stoi(nstring); 
-                        if (num<min) {min = num; mini=i;}
-                        if (num>max) {max = num; maxi=i;}
+                        if (num<=min) {min = num; mini=i;}
+                        if (num>=max) {max = num; maxi=i;}
                     }
                     HP = HP - (maxi + mini);
                     //ghost 2
@@ -294,11 +295,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                             mtx = -2;
                             mti = -3;
                         }
-
                     }
-
-
-                    
                     HP = HP - (mtx + mti);
                     //ghost 3
                 } else if (ghostEvent[i] == '3'){
@@ -335,22 +332,28 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                         xi = (17 * xi + 9)%257;
                         if(xi>max1_3x){max1_3x=xi;max1_3i=numi;} 
                         numi++;
-                    }
+                    } stream4.seekg(0,ios::beg);
                     getline(stream4,nstring,','); numi=1;
                     for (int i=1;i<3;i++){
                         getline(stream4,nstring,',');
                         xi = stoi(nstring); 
                         if(xi<0) xi = -xi;
                         xi = (17 * xi + 9)%257;
-                        if(xi>max2_3x&&max2_3x<max1_3x){max2_3x=xi;max2_3i=numi;}
+                        if((xi>max2_3x&&max2_3x<max1_3x)||(max2_3x==max1_3x)){max2_3x=xi;max2_3i=numi;}
                         numi++;
+                    }
+                    if (max2_3x==max1_3x) {
+                        max2_3x = -5; max2_3i = -7;
                     }          
                     HP = HP - (max2_3x + max2_3i);
                 }
                 HPcontrol(HP,MaxHP);
                 revive(HP,phoenixdown,rescue, MaxHP); if (rescue ==0) break;
+                backup.close();
+                //nấm debug
+                stream4.seekg(0,ios::beg);
             }
-        }
+        } else backup.close();
         //luom thuoc
         if (event ==15||event==16||event==17){
             pickup(remedy,maidenkiss,phoenixdown,event);
@@ -379,6 +382,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                 }
             }
             usepotion(remedy,maidenkiss,j,k,HP,MaxHP,level,olevel);
+            potioncontrol(remedy,maidenkiss,phoenixdown);
             as++;
         }
         //bo$$ cuoi 💀☠
@@ -426,7 +430,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
         k--; if (k==0){
             level=olevel;
         }   
-        if (i==n&&HP>0) rescue =1;
+        if (i==n&&HP>0) rescue=1;
         //displaying
         display(HP, level, remedy, maidenkiss, phoenixdown, rescue); 
         //hoi sinh
