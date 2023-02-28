@@ -371,7 +371,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
         //god of thuoc
         if (event==19&&as==0){
             string thuoc,dong;
-            int row,col;
+            int row,col,thuocint;
             backup2.open(aclepius);
             getline(backup2,thuoc); 
             row = stoi(thuoc);
@@ -382,10 +382,11 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                 stringstream dongstream(dong);
                 for (int j=0;j<col;j++){
                     getline(dongstream, thuoc,' ');
-                    if ((thuoc=="16"||thuoc=="17"||thuoc=="18")&&soluong<3){
+                    thuocint = stoi(thuoc);
+                    if ((thuocint==16||thuocint==17||thuocint==18)&&soluong<3){
                         soluong++;
-                        if (thuoc=="16") remedy++;
-                        else if (thuoc=="17") maidenkiss++;
+                        if (thuocint==16) remedy++;
+                        else if (thuocint==17) maidenkiss++;
                         else phoenixdown++;
                     }
                 }
