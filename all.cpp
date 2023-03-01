@@ -10,6 +10,19 @@ using namespace std;
 //#knight.h
 
 //level quai
+#include "knight.h"
+//#main.h
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <math.h>
+
+using namespace std;
+
+//#knight.h
+
+//level quai
 int levelOf(int i){
         int b=i%10;
         int levelO = i > 6?(b > 5?b : 5) : b;
@@ -139,7 +152,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
     string event;
     //line1
     ifstream data,backup,backup1,backup2,backup3;
-    data.open("tc1_input");
+    data.open(file_input);
     string line1;
     getline(data, line1);
     stringstream stream1(line1);
@@ -168,7 +181,6 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
     int as=0,mer=0;
     //processing
     while (stream2 >> event){
-        //win ez
         //win
         if(event == "0") { if (HP>0) rescue=1;display(HP, level, remedy, maidenkiss, phoenixdown, rescue); break;};
         //level quai
@@ -179,30 +191,30 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
             else if (levelup(level,levelO)) {} else damage(event,level,levelO,HP);
         }
         //phat^.
-        if (event == "6" && j<=0 && k<=0){
+        else if (event == "6" && j<=0 && k<=0){
             if(primeCheck(MaxHP)||kingCheck(MaxHP)) level+=2;
         else if (levelup(level,levelO)) levelup(level,levelO); 
         else tiny(level, levelO,HP,remedy,j);
         }    
         
         //con coc
-        if (event == "7" && j<=0 && k<=0){
+        else if (event == "7" && j<=0 && k<=0){
         if(primeCheck(MaxHP)||kingCheck(MaxHP)) level+=2;
         else if(levelup(level,levelO)) levelup(level,levelO);
         else frog(level,levelO,HP,maidenkiss,k);
         }    
         
         //nam MushMario
-        if (event=="11"){
+        else if (event=="11"){
             mushmario(level,phoenixdown,HP,MaxHP);
         }
         //nam Fibo
-        if (event == "12"){
+        else if (event == "12"){
             fibo(HP);
         }
         //nấm ma 👻
-        backup.open(ghost);
-        if(event[0]=='1'&&event[1]=='3'){
+        else if(event[0]=='1'&&event[1]=='3'){
+            backup.open(ghost);
             int n13,num,trunggian;
             string nstring,ghostline;
             getline(backup,nstring);
@@ -334,15 +346,15 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                 backup.close();
                 //nấm debug
                 stream4.seekg(0,ios::beg);
-            }
-        } else backup.close();
+            } backup.close();
+        }
         //luom thuoc
-        if (event =="15"||event=="16"||event=="17"){
+        else if (event =="15"||event=="16"||event=="17"){
             pickup(remedy,maidenkiss,phoenixdown,event);
             usepotion(remedy,maidenkiss,j,k,HP,MaxHP,level,olevel);
         }
         //god of thuoc
-        if (event=="19"&&as==0){
+        else if (event=="19"&&as==0){
             string thuoc,dong;
             int row,col,thuocint;
             backup2.open(aclepius);
@@ -369,7 +381,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
             as++;
         }
         //bo$$ cuoi 💀☠
-        if (event=="99"){
+        else if (event=="99"){
             if(primeCheck(MaxHP)){
                 if (level>=8){
                     level = 10;
@@ -385,7 +397,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                     break;
             }
             else {
-                if (level ==10){
+                if (level==10){
                 } else {
                     rescue =0;
                     display(HP, level, remedy, maidenkiss, phoenixdown, rescue); 
@@ -393,8 +405,8 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                 }
             }
         }
-        // merlin gay 🏳️‍🌈
-        if (event=="18"&&mer==0){
+        // merlin
+        else if (event=="18"&&mer==0){
             string item,dongmerlin;
             int row;
             backup3.open(merlin);
