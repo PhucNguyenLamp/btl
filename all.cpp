@@ -381,7 +381,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
             for (int i=0;i<row;i++){
                 int soluong=0;
                 getline(backup2,dong);
-                stringstream dongstream(dong);
+                stringstream dongstream(dong); //cho nay nho sua istringstream
                 for (int j=0;j<col;j++){
                     getline(dongstream, thuoc,' ');
                     thuocint = stoi(thuoc);
@@ -393,8 +393,8 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                     }
                 }
             }
-            usepotion(remedy,maidenkiss,j,k,HP,MaxHP,level,olevel);
             potioncontrol(remedy,maidenkiss,phoenixdown);
+            usepotion(remedy,maidenkiss,j,k,HP,MaxHP,level,olevel);
             as++;
         }
         //bo$$ cuoi 💀☠
