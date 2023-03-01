@@ -1,5 +1,6 @@
 #include "knight.h"
 
+
 //level quai
 int levelOf(int i){
         int b=i%10;
@@ -140,6 +141,9 @@ bool primeCheck(int MaxHP){
     }
     return true;
 }
+bool kingCheck(int MaxHP){
+    if (MaxHP==999) return true; else return false;
+}
 //knight.cpp
 void display(int HP, int level, int remedy, int maidenkiss, int phoenixdown, int rescue) {
     cout << "HP=" << HP
@@ -155,7 +159,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
     int event, i = 1, j=-1, k=-1,n=0; //event array
     //line1
     ifstream data,backup,backup1,backup2,backup3;
-    data.open(file_input);
+    data.open(file_input); //lay tu nhap
     string line1;
     getline(data, line1);
     stringstream stream1(line1);
@@ -185,26 +189,25 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
     //processing
     while (stream2 >> event){
         //win ez
-        if (MaxHP==999){display(HP, level, remedy, maidenkiss, phoenixdown, rescue); break;}
         //win
         if(event0(event)) { if (HP>0) rescue=1;display(HP, level, remedy, maidenkiss, phoenixdown, rescue); break;};
         //level quai
         int levelO = levelOf(i);
         //quai quen
         if(event1_5(event)){
-            if(primeCheck(MaxHP)) level++;
+            if(primeCheck(MaxHP)||kingCheck(MaxHP)) level++;
             else if (levelup(level,levelO)) {} else damage(event,level,levelO,HP);
         }
         //phat^.
         if (event6(event,j,k)){
-            if(primeCheck(MaxHP)) level+=2;
+            if(primeCheck(MaxHP)||kingCheck(MaxHP)) level+=2;
         else if (levelup(level,levelO)) levelup(level,levelO); 
         else tiny(level, levelO,HP,remedy,j);
         }    
         
         //con coc
         if (event7(event,j,k)){
-        if(primeCheck(MaxHP)) level+=2;
+        if(primeCheck(MaxHP)||kingCheck(MaxHP)) level+=2;
         else if(levelup(level,levelO)) levelup(level,levelO);
         else frog(level,levelO,HP,maidenkiss,k);
         }    
@@ -396,8 +399,13 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                     display(HP, level, remedy, maidenkiss, phoenixdown, rescue); 
                     break;
                 }
-                
-            } else {
+
+            } else if (kingCheck(MaxHP)) {
+                    rescue=0;
+                    display(HP, level, remedy, maidenkiss, phoenixdown, rescue); 
+                    break;
+            }
+            else {
                 if (level ==10){
                 } else {
                     rescue =0;
@@ -406,7 +414,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                 }
             }
         }
-        // merlin 🏳️‍🌈
+        // merlin gay 🏳️‍🌈
         if (event==18&&mer==0){
             string item,dongmerlin;
             int row;
