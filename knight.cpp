@@ -237,7 +237,10 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                     if (check==n13-2) {
                         mtx = initial;
                         mti = 0;
-                    }
+                    } else {
+                            mtx = -2;
+                            mti = -3;
+                        }
                     } else if (initial==num) {
                         mtx = -2;
                         mti = -3;
