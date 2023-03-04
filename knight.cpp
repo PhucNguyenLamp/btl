@@ -327,7 +327,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                 }
                 HPcontrol(HP,MaxHP);
                 revive(HP,phoenixdown,rescue, MaxHP); if (rescue ==0) break;
-                cout << "* "; display(HP, level, remedy, maidenkiss, phoenixdown, rescue); 
+                // cout << "* "; display(HP, level, remedy, maidenkiss, phoenixdown, rescue); 
                 backup.close();
                 //nấm debug
                 stream4.seekg(0,ios::beg);
