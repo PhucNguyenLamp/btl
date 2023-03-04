@@ -116,19 +116,22 @@ void pickup(int &remedy,int &maidenkiss, int &phoenixdown,string &event){
     potioncontrol(remedy,maidenkiss,phoenixdown);
 }
 void usepotion(int &remedy,int &maidenkiss,int &j,int &k,int &HP,int &MaxHP,int &level,int &olevel){
-    if (j>1){
+    if (j>=1){
         remedy--;
         HP *=5;
         if (HP > MaxHP) HP = MaxHP;
+        j=-1;
     } 
-    if (k>1){
+    if (k>=1){
         maidenkiss--;
         level = olevel;
+        k=-1;
     }
 }
 //primecheck for lancelot
 bool primeCheck(int MaxHP){
-    for (int i=2;i<MaxHP/2;i++){
+    if (MaxHP==1) return false;
+    for (int i=2;i<MaxHP;i++){
         if (MaxHP%i==0) return false;
     }
     return true;
@@ -187,19 +190,19 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
         int levelO = levelOf(i);
         //quai quen
         if(event == "1" ||event=="2"||event == "3" ||event=="4"||event =="5"){
-            if(primeCheck(MaxHP)||kingCheck(MaxHP)) level++;
+            if(primeCheck(MaxHP)||kingCheck(MaxHP)) {if (level<10)level++;}
             else if (levelup(level,levelO)) {} else damage(event,level,levelO,HP);
         }
         //phat^.
         else if (event == "6" && j<=0 && k<=0){
-            if(primeCheck(MaxHP)||kingCheck(MaxHP)) level+=2;
+            if(primeCheck(MaxHP)||kingCheck(MaxHP)) {if (level <10) level++;if (level <10) level++;}
         else if (levelup(level,levelO)) levelup(level,levelO); 
         else tiny(level, levelO,HP,remedy,j);
         }    
         
         //con coc
         else if (event == "7" && j<=0 && k<=0){
-        if(primeCheck(MaxHP)||kingCheck(MaxHP)) level+=2;
+        if(primeCheck(MaxHP)||kingCheck(MaxHP)) {if (level <10) level++;if (level <10) level++;}
         else if(levelup(level,levelO)) levelup(level,levelO);
         else frog(level,levelO,HP,maidenkiss,k);
         }    
@@ -243,6 +246,8 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                     initial = stoi(nstring);
                     getline(stream4,nstring,',');
                     num = stoi(nstring);
+                    if (n13==1) {mtx=initial;mti=0;}
+                    else {
                     if (initial>num){
                         int check=0,num2=0;
                         for (int i=2;i<n13;i++){
@@ -290,6 +295,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                             mti = -3;
                         }
                     }
+                    }
                     HP = HP - (mtx + mti);
                     //ghost 3
                 } else if (event[i] == '3'){
@@ -333,7 +339,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                         xi = stoi(nstring); 
                         if(xi<0) xi = -xi;
                         xi = (17 * xi + 9)%257;
-                        if((xi>max2_3x&&max2_3x<max1_3x)||(max2_3x==max1_3x)){max2_3x=xi;max2_3i=numi;}
+                        if(((xi>max2_3x)&&(xi<max1_3x))||(max2_3x==max1_3x)){max2_3x=xi;max2_3i=numi;}
                         numi++;
                     }
                     if (max2_3x==max1_3x) {
@@ -343,6 +349,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                 }
                 HPcontrol(HP,MaxHP);
                 revive(HP,phoenixdown,rescue, MaxHP); if (rescue ==0) break;
+                // cout << "* "; display(HP, level, remedy, maidenkiss, phoenixdown, rescue); 
                 backup.close();
                 //nấm debug
                 stream4.seekg(0,ios::beg);
@@ -421,7 +428,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
             mer++;
         }
         //clock
-        revive(HP,phoenixdown,rescue, MaxHP);
+        revive(HP,phoenixdown,rescue,MaxHP);
         j--; if (j==0){
             HP *=5;
             if (HP > MaxHP) HP = MaxHP;
