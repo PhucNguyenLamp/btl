@@ -94,13 +94,13 @@ void pickup(int &remedy,int &maidenkiss, int &phoenixdown,string &event){
     potioncontrol(remedy,maidenkiss,phoenixdown);
 }
 void usepotion(int &remedy,int &maidenkiss,int &j,int &k,int &HP,int &MaxHP,int &level,int &olevel){
-    if (j>=1){
+    if (j>=1&&HP>0){
         remedy--;
         HP *=5;
         if (HP > MaxHP) HP = MaxHP;
         j=-1;
     } 
-    if (k>=1){
+    if (k>=1&&HP>0){
         maidenkiss--;
         level = olevel;
         k=-1;
@@ -410,12 +410,12 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
         }
         //clock
         revive(HP,phoenixdown,rescue,MaxHP);
-        j--; if (j==0){
+        j--; if (j==0&&HP>0){
             HP *=5;
             if (HP > MaxHP) HP = MaxHP;
         }   
 
-        k--; if (k==0){
+        k--; if (k==0&&HP>0){
             level=olevel;
         }   
         if (i==n&&HP>0) rescue=1;

@@ -1,17 +1,4 @@
-//#main.h
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <string>
-#include <math.h>
 
-using namespace std;
-
-//#knight.h
-
-//level quai
-#include "knight.h"
-//#main.h
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -116,13 +103,13 @@ void pickup(int &remedy,int &maidenkiss, int &phoenixdown,string &event){
     potioncontrol(remedy,maidenkiss,phoenixdown);
 }
 void usepotion(int &remedy,int &maidenkiss,int &j,int &k,int &HP,int &MaxHP,int &level,int &olevel){
-    if (j>=1){
+    if (j>=1&&HP>0){
         remedy--;
         HP *=5;
         if (HP > MaxHP) HP = MaxHP;
         j=-1;
     } 
-    if (k>=1){
+    if (k>=1&&HP>0){
         maidenkiss--;
         level = olevel;
         k=-1;
@@ -153,29 +140,31 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
     //inital
     int i = 1, j=-1, k=-1,n=0; //event array
     string event;
-    //line1
     ifstream data,backup,backup1,backup2,backup3;
     data.open(file_input);
-    string line1;
+
+    //get input
+    string line1,line2,count,line3;
     getline(data, line1);
+    getline(data, line2);
+    getline(data, line3);
+
+    //line1
     stringstream stream1(line1);
     stream1>> HP >> level >>  remedy >> maidenkiss >> phoenixdown;
 
     //line2
-    string line2,count;
-    getline(data, line2);
     stringstream stream2(line2);
     stringstream stream2s(line2);
     while (stream2s >> count){n++;}
 
     //line3
-    string line3;
-    getline(data, line3);
     stringstream stream3(line3);
     string ghost,aclepius,merlin;
     getline(stream3,ghost,',');
     getline(stream3,aclepius,',');
     getline(stream3,merlin);
+
     data.close();
 
     rescue = -1; //initial
@@ -402,9 +391,7 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
                 }
 
             } else if (kingCheck(MaxHP)) {
-                    rescue=0;
-                    display(HP, level, remedy, maidenkiss, phoenixdown, rescue); 
-                    break;
+                    level = 10;
             }
             else {
                 if (level==10){
@@ -432,12 +419,12 @@ void adventureToKoopa(string file_input, int & HP, int & level, int & remedy, in
         }
         //clock
         revive(HP,phoenixdown,rescue,MaxHP);
-        j--; if (j==0){
+        j--; if (j==0&&HP>0){
             HP *=5;
             if (HP > MaxHP) HP = MaxHP;
         }   
 
-        k--; if (k==0){
+        k--; if (k==0&&HP>0){
             level=olevel;
         }   
         if (i==n&&HP>0) rescue=1;
